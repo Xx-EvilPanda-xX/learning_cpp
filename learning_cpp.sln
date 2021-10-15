@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "learning_cpp", "learning_cpp\learning_cpp.vcxproj", "{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Debug|x64.ActiveCfg = Debug|x64
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Debug|x64.Build.0 = Debug|x64
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Debug|x86.ActiveCfg = Debug|Win32
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Debug|x86.Build.0 = Debug|Win32
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Release|x64.ActiveCfg = Release|x64
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Release|x64.Build.0 = Release|x64
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Release|x86.ActiveCfg = Release|Win32
+		{FB1F7DE7-AD8F-4EB4-A5E4-4048A5D09C91}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B913248A-9548-487D-B465-1D7ABE8AC77F}
+	EndGlobalSection
+EndGlobal
