@@ -4,26 +4,26 @@
 namespace logger
 {
 
-	void printResults(IntResult result)
+	void printResults(IntResult* result)
 	{
-		std::cout << "\nProduct: " << result.product << "\n";
-		std::cout << "Sum: " << result.sum << "\n";
-		std::cout << "Quotient: " << result.quotient << "\n";
-		std::cout << "Difference: " << result.difference << "\n\n";
+		std::cout << "\nProduct: " << result->product << "\n";
+		std::cout << "Sum: " << result->sum << "\n";
+		std::cout << "Quotient: " << result->quotient << "\n";
+		std::cout << "Difference: " << result->difference << "\n\n";
 	}
 
-	void printResults(FloatResult result)
+	void printResults(FloatResult* result)
 	{
-		std::cout << "\nProduct: " << result.product << "\n";
-		std::cout << "Sum: " << result.sum << "\n";
-		std::cout << "Quotient: " << result.quotient << "\n";
-		std::cout << "Difference: " << result.difference << "\n\n";
+		std::cout << "\nProduct: " << result->product << "\n";
+		std::cout << "Sum: " << result->sum << "\n";
+		std::cout << "Quotient: " << result->quotient << "\n";
+		std::cout << "Difference: " << result->difference << "\n\n";
 	}
 
-	void printResults(BoolResult result)
+	void printResults(BoolResult* result)
 	{
 		std::cout << std::boolalpha;
-		std::cout << "\nBoolean AND gate: " << result.boolAnd << "\n\n";
+		std::cout << "\nBoolean AND gate: " << result->boolAnd << "\n\n";
 		std::cout << std::noboolalpha;
 	}
 

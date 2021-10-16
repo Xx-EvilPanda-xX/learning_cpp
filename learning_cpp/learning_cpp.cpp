@@ -30,7 +30,7 @@ int main()
     std::cout << "\nint input 1 = " << intInput_a << "\n";
     std::cout << "\nint input 2 = " << intInput_b << "\n";
 
-    logger::printResults(*intResult);
+    logger::printResults(intResult);
     delete intResult;
     intResult = nullptr;
 
@@ -57,7 +57,7 @@ int main()
     std::cout << "\nfloat input 1 = " << floatInput_a << "\n";
     std::cout << "\nfloat input 2 = " << floatInput_b << "\n";
 
-    logger::printResults(*floatResult);
+    logger::printResults(floatResult);
     delete floatResult;
     floatResult = nullptr;
 
@@ -75,7 +75,9 @@ int main()
     std::cout << "\nbool input 1 = " << boolInput_a << "\n";
     std::cout << "\nbool input 2 = " << boolInput_b << "\n";
 
-    logger::printResults(*boolResult);
+    logger::printResults(boolResult);
+    delete boolResult;
+    boolResult = nullptr;
 }
 
 void test()

@@ -16,7 +16,7 @@ namespace strings
             }
         }
 
-        char* finalStr{ new char[newLength + 1] };
+        char* finalStr{ new char[newLength + (size_t)1] };
         int ptr{};
 
         for (int i{}; i < numStrings; ++i)
@@ -47,7 +47,7 @@ namespace strings
             }
         }
 
-        char* string{ new char[len + 1]{} };
+        char* string{ new char[len + (size_t)1]{} };
 
         for (int i{}; i < len; ++i)
         {
@@ -58,41 +58,41 @@ namespace strings
             switch (numVal)
             {
             case 0:
-                string[(len - 1) - i] = '0';
+                *(string + (len - (size_t)1) - i) = '0';
                 break;
             case 1:
-                string[(len - 1) - i] = '1';
+                *(string + (len - (size_t)1) - i) = '1';
                 break;
             case 2:
-                string[(len - 1) - i] = '2';
+                *(string + (len - (size_t)1) - i) = '2';
                 break;
             case 3:
-                string[(len - 1) - i] = '3';
+                *(string + (len - (size_t)1) - i) = '3';
                 break;
             case 4:
-                string[(len - 1) - i] = '4';
+                *(string + (len - (size_t)1) - i) = '4';
                 break;
             case 5:
-                string[(len - 1) - i] = '5';
+                *(string + (len - (size_t)1) - i) = '5';
                 break;
             case 6:
-                string[(len - 1) - i] = '6';
+                *(string + (len - (size_t)1) - i) = '6';
                 break;
             case 7:
-                string[(len - 1) - i] = '7';
+                *(string + (len - (size_t)1) - i) = '7';
                 break;
             case 8:
-                string[(len - 1) - i] = '8';
+                *(string + (len - (size_t)1) - i) = '8';
                 break;
             case 9:
-                string[(len - 1) - i] = '9';
+                *(string + (len - (size_t)1) - i) = '9';
                 break;
             default:
-                string[(len - 1) - i] = 'e';
+                *(string + (len - (size_t)1) - i) = 'e';
             }
         }
 
-        string[len] = '\0';
+        *(string + len) = '\0';
 
         return string;
     }

@@ -25,11 +25,11 @@ namespace logger
 	};
 
 
-	void printResults(IntResult result);
+	void printResults(IntResult* result);
 
-	void printResults(FloatResult result);
+	void printResults(FloatResult* result);
 
-	void printResults(BoolResult result);
+	void printResults(BoolResult* result);
 
 }
 

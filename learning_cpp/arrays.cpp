@@ -22,16 +22,15 @@ namespace arrays
 
         for (int i{}; i < length; ++i)
         {
-            char* iter{ strings::toString(i) };
-
+            const char* iter{ strings::toString(i) };
             const char* strings[]{ "Enter an integer value for element #", iter, ": " };
-            char* str{ strings::strCat(strings, 3) };
+            const char* str{ strings::strCat(strings, 3) };
 
             int element{ input::getIntInput(str) };
             delete[] str;
             delete[] iter;
 
-            *(arr + i) = element;
+            arr[i] = element;
         }
 
         return arr;
@@ -46,6 +45,7 @@ namespace arrays
                 if (array[j] > array[j + 1])
                 {
                     int tempElement{ array[j] };
+
                     array[j] = array[j + 1];
                     array[j + 1] = tempElement;
                 }
