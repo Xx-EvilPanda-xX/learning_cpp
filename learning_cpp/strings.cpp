@@ -3,6 +3,8 @@
 
 namespace strings
 {
+    static int abs(int value);
+
     char* strCat(const char* strings[], int numStrings)
     {
         int newLength{};
@@ -38,6 +40,14 @@ namespace strings
     {
         int len{};
         int divisor{};
+        bool negative{};
+
+        if (val < 0)
+        {
+            val = abs(val);
+            negative = true;
+        }
+
         for (int i{}; len == 0; ++i)
         {
             divisor = (int)std::pow(10, i);
@@ -47,7 +57,7 @@ namespace strings
             }
         }
 
-        char* string{ new char[len + (size_t)1]{} };
+        char* string{ new char[len + (size_t)1]{} }; // +1 for null terminator
 
         for (int i{}; i < len; ++i)
         {
@@ -94,6 +104,34 @@ namespace strings
 
         *(string + len) = '\0';
 
+        if (negative)
+        {
+            int tempLen{ len + 1 }; // +1 for "-" negative indicator at the front
+            char* temp{ new char[tempLen + (size_t)1] }; // +1 for null terminator
+            temp[0] = '-';
+            for (int i{}; i < len; ++i)
+            {
+                *(temp + (i + (size_t)1)) = *(string + i);
+            }
+            *(temp + tempLen) = '\0';
+
+            delete[] string;
+            string = temp;
+        }
+
         return string;
+    }
+
+    static int abs(int value)
+    {
+        if (value >= 0)
+        {
+            return value;
+        }
+        else
+        {
+            value -= value * 2;
+            return value;
+        }
     }
 }
