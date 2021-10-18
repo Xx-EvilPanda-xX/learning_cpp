@@ -1,9 +1,9 @@
 #include "strings.h"
-#include <iostream>
 
 namespace strings
 {
     static int abs(int value);
+    static int pow(int base, int exp);
 
     char* strCat(const char* strings[], int numStrings)
     {
@@ -50,7 +50,7 @@ namespace strings
 
         for (int i{}; len == 0; ++i)
         {
-            divisor = (int)std::pow(10, i);
+            divisor = pow(10, i);
             if ((val / divisor) == 0)
             {
                 len = i;
@@ -61,9 +61,9 @@ namespace strings
 
         for (int i{}; i < len; ++i)
         {
-            int pow{ (int)std::pow(10, i + 1) };
-            int numVal{ val % pow };
-            numVal /= (pow / 10);
+            int power{ pow(10, i + 1) };
+            int numVal{ val % power };
+            numVal /= (power / 10);
 
             switch (numVal)
             {
@@ -133,5 +133,21 @@ namespace strings
             value -= value * 2;
             return value;
         }
+    }
+
+    static int pow(int base, int exp)
+    {
+        if (exp < 0)
+        {
+            return 0;
+        }
+
+        int result = 1;
+        for (int i{}; i < exp; ++i)
+        {
+            result *= base;
+        }
+
+        return result;
     }
 }

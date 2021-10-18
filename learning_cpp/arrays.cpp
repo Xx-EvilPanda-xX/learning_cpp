@@ -18,7 +18,7 @@ namespace arrays
 
     int* getArray(int length)
     {
-        int* arr{ new int[length] };
+        int* arr{ new int[length] {} };
 
         for (int i{}; i < length; ++i)
         {
