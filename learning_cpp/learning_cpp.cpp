@@ -3,11 +3,15 @@
 #include "logger.h"
 #include "constants.h"
 #include "arrays.h"
+#include "tictactoe.h"
 
 void test();
 
 int main()
 {
+    tictactoe::TicTacToe tictactoe{ false, 1, 10 };
+    tictactoe.start();
+
     test();
     arrays::arrayCalculation();
 

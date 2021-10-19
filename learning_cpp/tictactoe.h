@@ -43,7 +43,11 @@ namespace tictactoe
 
 		PlayerInput getPlayerInput();
 
+		PlayerInput getBotInput();
+
 		void printGrid();
+
+		char* catAndDelete(char* string, const char* cat[], int numStrings);
 
 	public:
 		TicTacToe(bool multiPlayer = false, int difficulty = 1, int size = 3);
