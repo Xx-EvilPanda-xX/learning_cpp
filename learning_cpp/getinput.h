@@ -8,6 +8,8 @@ namespace input
 	float getFloatInput(const char* message);
 
 	bool getBoolInput(const char* message);
+
+	char* getStringInput(const char* message);
 }
 
 #endif

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tictactoe.h"
 #include "strings.h"
+#include "getinput.h"
 
 namespace tictactoe
 {
@@ -9,8 +10,32 @@ namespace tictactoe
 		grid = new SlotState[size * size] {};
 		for (int i{}; i < size * size; ++i)
 		{
-			grid[i] = SlotState::x;
+			grid[i] = SlotState::none;
 		}
+
+		char* type;
+		playerType = SlotState::none;
+
+		while (playerType == SlotState::none)
+		{
+			type = { input::getStringInput("Please enter a character ('x' or 'o') for your player type: ") };
+
+			switch (*type)
+			{
+			case 'x':
+				playerType = SlotState::x;
+				break;
+			case 'o':
+				playerType = SlotState::o;
+				break;
+			default:
+				std::cout << "Invalid input!\n";
+				playerType = SlotState::none;
+				break;
+			}
+		}
+
+		delete[] type;
 
 		state = GameState::playing;
 	}
@@ -19,23 +44,30 @@ namespace tictactoe
 	{
 		//while (state == GameState::playing)
 		//{
+			PlayerInput playerInput{ getPlayerInput() };
+			updateGrid(playerInput);
+
+			PlayerInput botInput{ getBotInput() };
+			updateGrid(botInput);
+
 			printGrid();
 		//}
 	}
 
 	void TicTacToe::updateGrid(PlayerInput input)
 	{
-
+		grid[input.index] = input.slot;
 	}
 
 	PlayerInput TicTacToe::getPlayerInput()
 	{
-		return PlayerInput{};
+
+		return PlayerInput{ 0, SlotState::o };
 	}
 
 	PlayerInput  TicTacToe::getBotInput()
 	{
-		return PlayerInput{};
+		return PlayerInput{ 1, SlotState::x };
 	}
 
 	void TicTacToe::printGrid()
@@ -43,29 +75,27 @@ namespace tictactoe
 		char* string{ new char[] { " " } };
 		for (int i{}; i < size; ++i)
 		{
-			char letter[2]{};
-			letter[0] = static_cast<char>(97 + i);
-			letter[1] = '\0';
-
+			char letter[]{ static_cast<char>(97 + i), '\0' };
 			const char* cat1[]{ string, "   ",  letter, };
-			string = catAndDelete(string, cat1, 3);
+			catAndDelete(string, cat1, 3);
 		}
 
 		const char* cat2[]{ string, "\n\n" };
-		string = catAndDelete(string, cat2, 2);
+		catAndDelete(string, cat2, 2);
 
 		for (int i{}; i < size; ++i)
 		{
 			char* itr{ strings::toString(i) };
 			const char* cat3[]{ string, itr, "   "};
-			string = catAndDelete(string, cat3, 3);
+			catAndDelete(string, cat3, 3);
 			delete[] itr;
 
 			for (int j{}; j < size; ++j)
 			{
 				char slot[2]{};
 
-				switch (getRow(i)[j])
+				SlotState* row{ getRow(i) };
+				switch (row[j])
 				{
 				case SlotState::none:
 					slot[0] = ' ';
@@ -77,11 +107,12 @@ namespace tictactoe
 					slot[0] = 'o';
 					break;
 				}
+				delete[] row;
 				
 				slot[1] = '\0';
 
 				const char* cat4[]{ string, slot, j != (size - 1) ? " | " : "" };
-				string = catAndDelete(string, cat4, 3);
+				catAndDelete(string, cat4, 3);
 			}
 
 			const int dashesSize{ size * 4 };
@@ -93,7 +124,7 @@ namespace tictactoe
 			dashes[dashesSize - 1] = '\0';
 
 			const char* cat5[]{ string, "\n   ", i != size - 1 ? dashes : "", "\n"};
-			string = catAndDelete(string, cat5, 4);
+			catAndDelete(string, cat5, 4);
 			delete[] dashes;
 		}
 
@@ -101,12 +132,11 @@ namespace tictactoe
 		delete[] string;
 	}
 
-	char* TicTacToe::catAndDelete(char* string, const char* cat[], int numStrings)
+	void TicTacToe::catAndDelete(char*& string, const char* cat[], int numStrings)
 	{
 		char* temp = strings::strCat(cat, numStrings);
 		delete[] string;
 		string = temp;
-		return string;
 	}
 
 	SlotState* TicTacToe::getRow(int rowIndex)

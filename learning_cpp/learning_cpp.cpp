@@ -9,6 +9,9 @@ void test();
 
 int main()
 {
+    char* input{ input::getStringInput("Please enter a string: ") };
+    std::cout << "You entered: " << input << "\n";
+
     tictactoe::TicTacToe tictactoe{ false, 1, 10 };
     tictactoe.start();
 

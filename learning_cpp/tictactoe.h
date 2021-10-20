@@ -27,6 +27,7 @@ namespace tictactoe
 	class TicTacToe
 	{
 	private:
+		SlotState playerType;
 		bool multiPlayer;
 		int difficulty;
 		int size;
@@ -47,7 +48,7 @@ namespace tictactoe
 
 		void printGrid();
 
-		char* catAndDelete(char* string, const char* cat[], int numStrings);
+		void catAndDelete(char*& string, const char* cat[], int numStrings);
 
 	public:
 		TicTacToe(bool multiPlayer = false, int difficulty = 1, int size = 3);

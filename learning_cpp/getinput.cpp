@@ -5,6 +5,7 @@
 namespace input
 {
     static void clearInputBuffer();
+    static constexpr int maxStingInput{ 255 };
 
     int getIntInput(const char* message)
     {
@@ -94,6 +95,31 @@ namespace input
         } while (failed);
 
         return *val;
+    }
+
+    char* getStringInput(const char* message)
+    {
+        std::cout << message;
+
+        char input[maxStingInput]{};
+        std::cin >> input;
+        clearInputBuffer();
+
+        int strSize{};
+        for (int i{}; input[i] != '\0'; ++i)
+        {
+            ++strSize;
+        }
+
+        char* finalString{ new char[strSize + 1] {} };
+
+        for (int i{}; input[i] != '\0'; ++i)
+        {
+            finalString[i] = input[i];
+        }
+
+        finalString[strSize] = '\0';
+        return finalString;
     }
 
     static void clearInputBuffer()
