@@ -1,5 +1,13 @@
 #ifndef TICTACTOE_H
 #define TICTACTOE_H
+namespace player
+{
+	class Player;
+
+	enum class PlayerType;
+
+	struct PlayerInput;
+}
 
 namespace tictactoe
 {
@@ -13,26 +21,20 @@ namespace tictactoe
 	enum class GameState
 	{
 		playing,
-		won,
-		lost,
+		player1win,
+		player2win,
 		catsGame
-	};
-
-	struct PlayerInput
-	{
-		int index{};
-		SlotState slot{};
 	};
 
 	class TicTacToe
 	{
 	private:
-		SlotState playerType;
-		bool multiPlayer;
-		int difficulty;
-		int size;
-		SlotState* grid;
-		GameState state;
+		player::Player* m_Player1;
+		player::Player* m_Player2;
+		const int m_Difficulty;
+		const int m_Size;
+		SlotState* m_Grid;
+		GameState m_State;
 
 		SlotState* getRow(int rowIndex);
 
@@ -40,18 +42,16 @@ namespace tictactoe
 
 		SlotState* getDiagonal(int diagonalIndex);
 
-		void updateGrid(PlayerInput input);
+		void updateGrid(player::PlayerInput input);
 
-		PlayerInput getPlayerInput();
-
-		PlayerInput getBotInput();
+		void updateState();
 
 		void printGrid();
 
 		void catAndDelete(char*& string, const char* cat[], int numStrings);
 
 	public:
-		TicTacToe(bool multiPlayer = false, int difficulty = 1, int size = 3);
+		TicTacToe(int difficulty = 1, int size = 3);
 
 		void start();
 
@@ -60,6 +60,8 @@ namespace tictactoe
 		int getDifficulty();
 
 		int getSize();
+
+		SlotState* getGrid();
 
 		GameState getState();
 	};

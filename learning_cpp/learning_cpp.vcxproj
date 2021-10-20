@@ -144,6 +144,7 @@
     <ClCompile Include="getinput.cpp" />
     <ClCompile Include="learning_cpp.cpp" />
     <ClCompile Include="logger.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="strings.cpp" />
     <ClCompile Include="tictactoe.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="getinput.h" />
     <ClInclude Include="logger.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="strings.h" />
     <ClInclude Include="tictactoe.h" />
   </ItemGroup>
