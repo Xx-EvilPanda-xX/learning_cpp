@@ -1,4 +1,6 @@
 #include <iostream>
+#include <random>
+#include <ctime>
 #include "tictactoe.h"
 #include "player.h"
 #include "getinput.h"
@@ -8,6 +10,9 @@ namespace player
 {
 	Player::Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot) : m_Instance{ instance }, m_PlayerType{ playerType }, m_IsBot{ isBot }
 	{
+		rand = std::mt19937{ static_cast<std::mt19937::result_type>(std::time(nullptr)) };
+		die = std::uniform_int_distribution<>{ 0, m_Instance->getSize() - 1 };
+		dieOther = std::uniform_int_distribution<>{ 0, m_Instance->getSize() * m_Instance->getSize() };
 	}
 
 	PlayerInput Player::getPlayerInput(const char* message)
@@ -82,7 +87,153 @@ namespace player
 	PlayerInput Player::getBotInput(const char* message)
 	{
 		std::cout << message;
-		return PlayerInput{ 1, m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+
+		for (int i{}; i < m_Instance->getSize(); ++i)
+		{
+			int xRowCount{}, oRowCount{}, noneRowCount{};
+			int xColumnCount{}, oColumnCount{}, noneColumnCount{};
+			int xDiagonalCount{}, oDiagonalCount{}, noneDiagonalCount{};
+
+			m_Instance->getRowSlotCounts(i, xRowCount, oRowCount, noneRowCount);
+			m_Instance->getColumnSlotCounts(i, xColumnCount, oColumnCount, noneColumnCount);
+
+			if (i < 2)
+			{
+				m_Instance->getDiagonalSlotCounts(i, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
+			}
+
+			int opponentRowSlots{ m_PlayerType == PlayerType::x ? oRowCount : xRowCount };
+			int opponentColumnSlots{ m_PlayerType == PlayerType::x ? oColumnCount : xColumnCount };
+			int opponentDiagonalSlots{ m_PlayerType == PlayerType::x ? oDiagonalCount : xDiagonalCount };
+			
+			if (opponentRowSlots > m_Instance->getSize() / 2 && (opponentRowSlots >= opponentColumnSlots && opponentRowSlots >= opponentDiagonalSlots))
+			{
+				while (true)
+				{
+					if (isFullRow(i)) 
+						break;
+
+					PlayerInput input{ (i * m_Instance->getSize()) + die(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+
+					if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
+					{
+						continue;
+					}
+
+					return input;
+				}
+			}
+
+			if (opponentColumnSlots > m_Instance->getSize() / 2 && (opponentColumnSlots >= opponentRowSlots && opponentColumnSlots >= opponentDiagonalSlots))
+			{
+				while (true)
+				{
+					if (isFullColumn(i))
+						break;
+
+					PlayerInput input{ i + (m_Instance->getSize() * die(rand)), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+
+					if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
+					{
+						continue;
+					}
+
+					return input;
+				}
+			}
+
+			if (i > 2)
+			{
+				if (opponentDiagonalSlots > m_Instance->getSize() / 2 && (opponentDiagonalSlots >= opponentRowSlots && opponentDiagonalSlots >= opponentColumnSlots))
+				{
+					while (true)
+					{
+						if (isFullDiagonal(i))
+							break;
+
+						PlayerInput input;
+						if (i == 0)
+						{
+							int random{ die(rand) };
+							input = PlayerInput{ (m_Instance->getSize() * random) + random, m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+						}
+						else if (i == 1)
+						{
+							int random{ die(rand) };
+							input = PlayerInput{ (m_Instance->getSize() * (random + 1)) - (random + 1), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+						}
+
+						if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
+						{
+							continue;
+						}
+
+						return input;
+					}
+				}
+			}
+		}
+
+		while (true)
+		{
+
+			PlayerInput input{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+
+			if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
+			{
+				continue;
+			}
+
+			return input;
+		}
+	}
+
+	bool Player::isFullRow(int index)
+	{
+		tictactoe::SlotState* row{ m_Instance->getRow(index) };
+
+		for (int i{}; i < m_Instance->getSize(); ++i)
+		{
+			if (row[i] == tictactoe::SlotState::none)
+			{
+				delete[] row;
+				return false;
+			}
+		}
+		delete[] row;
+		return true;
+	}
+
+	bool Player::isFullColumn(int index)
+	{
+		tictactoe::SlotState* column{ m_Instance->getColumn(index) };
+
+		for (int i{}; i < m_Instance->getSize(); ++i)
+		{
+			if (column[i] == tictactoe::SlotState::none)
+			{
+				delete[] column;
+				return false;
+			}
+		}
+		delete[] column;
+		return true;
+	}
+
+	bool Player::isFullDiagonal(int index)
+	{
+		tictactoe::SlotState* diagonal{ m_Instance->getDiagonal(index) };
+
+		for (int i{}; i < m_Instance->getSize(); ++i)
+		{
+			if (diagonal[i] == tictactoe::SlotState::none)
+			{
+				delete[] diagonal;
+				return false;
+			}
+		}
+		delete[] diagonal;
+		return true;
 	}
 
 	PlayerType Player::getPlayerType()

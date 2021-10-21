@@ -1,5 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#include <random>
+
 namespace tictactoe
 {
 	class TicTacToe;
@@ -29,6 +31,17 @@ namespace player
 		tictactoe::TicTacToe* m_Instance;
 		PlayerType m_PlayerType;
 		bool m_IsBot;
+		//int currentOffenceIndex;
+		//int currentOffenceType;
+		std::mt19937 rand;
+		std::uniform_int_distribution<> die;
+		std::uniform_int_distribution<> dieOther;
+
+		bool isFullRow(int index);
+
+		bool isFullColumn(int index);
+
+		bool isFullDiagonal(int index);
 
 	public:
 		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot);

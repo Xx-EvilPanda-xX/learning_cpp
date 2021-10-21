@@ -36,12 +36,6 @@ namespace tictactoe
 		SlotState* m_Grid;
 		GameState m_State;
 
-		SlotState* getRow(int rowIndex);
-
-		SlotState* getColumn(int columnIndex);
-
-		SlotState* getDiagonal(int diagonalIndex);
-
 		void updateGrid(player::PlayerInput input);
 
 		void updateState();
@@ -55,8 +49,6 @@ namespace tictactoe
 
 		void start();
 
-		bool getMultiPlayer();
-
 		int getDifficulty();
 
 		int getSize();
@@ -64,6 +56,18 @@ namespace tictactoe
 		SlotState* getGrid();
 
 		GameState getState();
+
+		SlotState* getRow(int rowIndex);
+
+		SlotState* getColumn(int columnIndex);
+
+		SlotState* getDiagonal(int diagonalIndex);
+
+		void getRowSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount);
+
+		void getColumnSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount);
+
+		void getDiagonalSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount);
 	};
 }
 

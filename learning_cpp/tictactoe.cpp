@@ -15,7 +15,7 @@ namespace tictactoe
 			std::exit(-1);
 		}
 
-		m_Grid = new SlotState[m_Size * m_Size] {};
+		m_Grid = new SlotState[m_Size * m_Size]{};
 		for (int i{}; i < m_Size * m_Size; ++i)
 		{
 			m_Grid[i] = SlotState::none;
@@ -82,13 +82,13 @@ namespace tictactoe
 			}
 			else
 			{
-				player::PlayerInput playerInput1{ m_Player1->getBotInput("Player 1 (bot) is calculating...") };
+				player::PlayerInput playerInput1{ m_Player1->getBotInput("Player 1 (bot) is thinking...") };
 				updateGrid(playerInput1);
 			}
 			printGrid();
 			updateState();
 			if (m_State != GameState::playing) break;
-			
+
 			if (!m_Player2->isBot())
 			{
 				player::PlayerInput playerInput2{ m_Player2->getPlayerInput("Player 2, enter a set coords (i.e. 'a0'): ") };
@@ -96,7 +96,7 @@ namespace tictactoe
 			}
 			else
 			{
-				player::PlayerInput playerInput2{ m_Player2->getBotInput("Player 2 (bot) is calculating...") };
+				player::PlayerInput playerInput2{ m_Player2->getBotInput("Player 2 (bot) is thinking...") };
 				updateGrid(playerInput2);
 			}
 			printGrid();
@@ -132,109 +132,38 @@ namespace tictactoe
 	{
 		for (int i{}; i < m_Size; ++i)
 		{
-			SlotState* row{ getRow(i) };
-			
-			int xCount{};
-			int oCount{};
-			int noneCount{};
-			for (int j{}; j < m_Size; ++j)
-			{
-				switch (row[j])
-				{
-				case SlotState::x:
-					++xCount;
-					break;
-				case SlotState::o:
-					++oCount;
-					break;
-				case SlotState::none:
-					++noneCount;
-					break;
-				}
-			}
-			delete[] row;
+			int xRowCount{}, oRowCount{}, noneRowCount{};
+			int xColumnCount{}, oColumnCount{}, noneColumnCount{};
 
-			if (xCount == m_Size)
+			getRowSlotCounts(i, xRowCount, oRowCount, noneRowCount);
+			getColumnSlotCounts(i, xColumnCount, oColumnCount, noneColumnCount);
+
+			if (xRowCount == m_Size || xColumnCount == m_Size)
 			{
 				m_State = m_Player1->getPlayerType() == player::PlayerType::x ? GameState::player1win : GameState::player2win;
 				return;
 			}
-			if (oCount == m_Size)
+			if (oRowCount == m_Size || oColumnCount == m_Size)
 			{
 				m_State = m_Player1->getPlayerType() == player::PlayerType::o ? GameState::player1win : GameState::player2win;
 				return;
 			}
-		}
 
-		for (int i{}; i < m_Size; ++i)
-		{
-			SlotState* column{ getColumn(i) };
-
-			int xCount{};
-			int oCount{};
-			int noneCount{};
-			for (int j{}; j < m_Size; ++j)
+			if (i < 2)
 			{
-				switch (column[j])
+				int xDiagonalCount{}, oDiagonalCount{}, noneDiagonalCount{};
+				getDiagonalSlotCounts(i, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
+
+				if (xDiagonalCount == m_Size)
 				{
-				case SlotState::x:
-					++xCount;
-					break;
-				case SlotState::o:
-					++oCount;
-					break;
-				case SlotState::none:
-					++noneCount;
-					break;
+					m_State = m_Player1->getPlayerType() == player::PlayerType::x ? GameState::player1win : GameState::player2win;
+					return;
 				}
-			}
-			delete[] column;
-
-			if (xCount == m_Size)
-			{
-				m_State = m_Player1->getPlayerType() == player::PlayerType::x ? GameState::player1win : GameState::player2win;
-				return;
-			}
-			if (oCount == m_Size)
-			{
-				m_State = m_Player1->getPlayerType() == player::PlayerType::o ? GameState::player1win : GameState::player2win;
-				return;
-			}
-		}
-
-		for (int i{}; i < 2; ++i)
-		{
-			SlotState* diagonal{ getDiagonal(i) };
-
-			int xCount{};
-			int oCount{};
-			int noneCount{};
-			for (int j{}; j < m_Size; ++j)
-			{
-				switch (diagonal[j])
+				if (oDiagonalCount == m_Size)
 				{
-				case SlotState::x:
-					++xCount;
-					break;
-				case SlotState::o:
-					++oCount;
-					break;
-				case SlotState::none:
-					++noneCount;
-					break;
+					m_State = m_Player1->getPlayerType() == player::PlayerType::o ? GameState::player1win : GameState::player2win;
+					return;
 				}
-			}
-			delete[] diagonal;
-
-			if (xCount == m_Size)
-			{
-				m_State = m_Player1->getPlayerType() == player::PlayerType::x ? GameState::player1win : GameState::player2win;
-				return;
-			}
-			if (oCount == m_Size)
-			{
-				m_State = m_Player1->getPlayerType() == player::PlayerType::o ? GameState::player1win : GameState::player2win;
-				return;
 			}
 		}
 
@@ -427,6 +356,81 @@ namespace tictactoe
 		}
 
 		return diagonal;
+	}
+
+	void TicTacToe::getRowSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount)
+	{
+		SlotState* row{ getRow(index) };
+
+		o_xCount = 0;
+		o_oCount = 0;
+		o_noneCount = 0;
+		for (int j{}; j < m_Size; ++j)
+		{
+			switch (row[j])
+			{
+			case SlotState::x:
+				++o_xCount;
+				break;
+			case SlotState::o:
+				++o_oCount;
+				break;
+			case SlotState::none:
+				++o_noneCount;
+				break;
+			}
+		}
+		delete[] row;
+	}
+
+	void TicTacToe::getColumnSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount)
+	{
+		SlotState* column{ getColumn(index) };
+
+		o_xCount = 0;
+		o_oCount = 0;
+		o_noneCount = 0;
+		for (int j{}; j < m_Size; ++j)
+		{
+			switch (column[j])
+			{
+			case SlotState::x:
+				++o_xCount;
+				break;
+			case SlotState::o:
+				++o_oCount;
+				break;
+			case SlotState::none:
+				++o_noneCount;
+				break;
+			}
+		}
+		delete[] column;
+	}
+
+	void TicTacToe::getDiagonalSlotCounts(int index, int& o_xCount, int& o_oCount, int& o_noneCount)
+	{
+		SlotState* diagonal{ getDiagonal(index) };
+
+		o_xCount = 0;
+		o_oCount = 0;
+		o_noneCount = 0;
+		for (int j{}; j < m_Size; ++j)
+		{
+			switch (diagonal[j])
+			{
+			case SlotState::x:
+				++o_xCount;
+				break;
+			case SlotState::o:
+				++o_oCount;
+				break;
+			case SlotState::none:
+				++o_noneCount;
+				break;
+			}
+		}
+		delete[] diagonal;
 	}
 
 	int TicTacToe::getDifficulty()
