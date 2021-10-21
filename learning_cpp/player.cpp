@@ -32,14 +32,30 @@ namespace player
 			constexpr int asciia{ 97 };
 
 			int numVal{};
+			bool invalid{};
 			for (int i{ 1 }; i < lengthCheck; ++i)
 			{
-				numVal += (input[(lengthCheck - 1) - (i - 1)] - ascii0) * strings::pow(10, (i - 1));
+				char value{ input[(lengthCheck - 1) - (i - 1)] };
+				if (value < '0' || value > '9')
+				{
+					std::cout << "Invalid input! (invalid numerical input)\n";
+					invalid = true;
+					break;
+				}
+				numVal += (value - ascii0) * strings::pow(10, (i - 1));
 			}
+
+			if (invalid) continue;
 
 			char charVal{ input[0] };
 
 			delete[] input;
+
+			if (charVal < 'a' || charVal > 'z')
+			{
+				std::cout << "Invalid input! (invalid character input)\n";
+				continue;
+			}
 			
 			if (charVal - asciia > m_Instance->getSize() - 1 || numVal > m_Instance->getSize() - 1)
 			{

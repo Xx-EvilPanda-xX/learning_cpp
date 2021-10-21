@@ -75,7 +75,7 @@ namespace tictactoe
 
 		while (true)
 		{
-			if (!m_Player2->isBot())
+			if (!m_Player1->isBot())
 			{
 				player::PlayerInput playerInput1{ m_Player1->getPlayerInput("Player 1, enter a set of coords (i.e. 'a0'): ") };
 				updateGrid(playerInput1);
