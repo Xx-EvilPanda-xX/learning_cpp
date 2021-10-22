@@ -100,13 +100,17 @@ namespace player
 			if (i < 2)
 			{
 				m_Instance->getDiagonalSlotCounts(i, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
-			}
+			}							
 
 			int opponentRowSlots{ m_PlayerType == PlayerType::x ? oRowCount : xRowCount };
 			int opponentColumnSlots{ m_PlayerType == PlayerType::x ? oColumnCount : xColumnCount };
 			int opponentDiagonalSlots{ m_PlayerType == PlayerType::x ? oDiagonalCount : xDiagonalCount };
+
+			int ownRowSlots{ m_PlayerType == PlayerType::x ? xRowCount : oRowCount };
+			int ownColumnSlots{ m_PlayerType == PlayerType::x ? xColumnCount : oColumnCount };
+			int ownDiagonalSlots{ m_PlayerType == PlayerType::x ? xDiagonalCount : oDiagonalCount };
 			
-			if (opponentRowSlots > m_Instance->getSize() / 2 && (opponentRowSlots >= opponentColumnSlots && opponentRowSlots >= opponentDiagonalSlots))
+			if (ownRowSlots == 0 && opponentRowSlots >= m_Instance->getSize() - (m_Instance->getSize() / 2) && (opponentRowSlots >= opponentColumnSlots && opponentRowSlots >= opponentDiagonalSlots))
 			{
 				while (true)
 				{
@@ -124,7 +128,7 @@ namespace player
 				}
 			}
 
-			if (opponentColumnSlots > m_Instance->getSize() / 2 && (opponentColumnSlots >= opponentRowSlots && opponentColumnSlots >= opponentDiagonalSlots))
+			if (ownColumnSlots == 0 && opponentColumnSlots >= m_Instance->getSize() - (m_Instance->getSize() / 2) && (opponentColumnSlots >= opponentRowSlots && opponentColumnSlots >= opponentDiagonalSlots))
 			{
 				while (true)
 				{
@@ -142,9 +146,9 @@ namespace player
 				}
 			}
 
-			if (i > 2)
+			if (i < 2)
 			{
-				if (opponentDiagonalSlots > m_Instance->getSize() / 2 && (opponentDiagonalSlots >= opponentRowSlots && opponentDiagonalSlots >= opponentColumnSlots))
+				if (ownDiagonalSlots == 0 && opponentDiagonalSlots >= m_Instance->getSize() - (m_Instance->getSize() / 2) && (opponentDiagonalSlots >= opponentRowSlots && opponentDiagonalSlots >= opponentColumnSlots))
 				{
 					while (true)
 					{
