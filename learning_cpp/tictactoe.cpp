@@ -85,6 +85,13 @@ namespace tictactoe
 		m_State = GameState::playing;
 	}
 
+	TicTacToe::~TicTacToe()
+	{
+		delete[] m_Grid;
+		delete m_Player1;
+		delete m_Player2;
+	}
+
 	void TicTacToe::start()
 	{
 		printGrid();

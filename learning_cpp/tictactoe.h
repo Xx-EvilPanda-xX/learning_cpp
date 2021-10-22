@@ -46,9 +46,9 @@ namespace tictactoe
 	public:
 		TicTacToe(int size = 3);
 
-		void start();
+		~TicTacToe();
 
-		int getDifficulty();
+		void start();
 
 		int getSize();
 

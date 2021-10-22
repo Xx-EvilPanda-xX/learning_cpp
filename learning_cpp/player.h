@@ -49,6 +49,8 @@ namespace player
 
 		bool isFullDiagonal(int index);
 
+		void checkForOffenceTarget();
+
 	public:
 		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot, const int difficulty);
 
