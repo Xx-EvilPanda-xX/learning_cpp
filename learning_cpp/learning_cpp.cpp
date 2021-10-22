@@ -9,15 +9,15 @@ void test();
 
 int main()
 {
-    int val{ 22 };
-    int* ptr{ &val };
-    std::cout << ptr << "\n";
-    int difficulty{ input::getIntInput("Please enter a tictactoe difficulty (int): ") };
+    //int val{ 22 };
+    //int* ptr{ &val };
+    //std::cout << ptr << "\n";
+
     int size{ input::getIntInput("Enter a width/height for the tictactoe grid (int): ") };
-    tictactoe::TicTacToe tictactoe{ difficulty, size };
+    tictactoe::TicTacToe tictactoe{ size };
     tictactoe.start();
 
-    std::cout << *ptr << "\n";
+    //std::cout << *ptr << "\n";
 
     test();
     arrays::arrayCalculation();

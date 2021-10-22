@@ -7,7 +7,7 @@
 
 namespace tictactoe
 {
-	TicTacToe::TicTacToe(int difficulty, int size) : m_Difficulty{ difficulty }, m_Size{ size }
+	TicTacToe::TicTacToe(const int size) : m_Size{ size }
 	{
 		if (size > 26 || size < 0)
 		{
@@ -53,8 +53,24 @@ namespace tictactoe
 
 		bool isBot1{ input::getBoolInput("\nIs player 1 a bot? (bool): ") };
 		bool isBot2{ input::getBoolInput("Is player 2 a bot? (bool): ") };
-		m_Player1 = new player::Player(this, playerType1, isBot1);
-		m_Player2 = new player::Player(this, playerType2, isBot2);
+		int difficulty1{};
+		int difficulty2{};
+		if (isBot1) difficulty1 = input::getIntInput("\nWhat is player 1's difficulty level? (0, 1, or 2): ");
+		if (isBot2) difficulty2 = input::getIntInput("\nWhat is player 2's difficulty level? (0, 1, or 2): ");
+		
+		if (difficulty1 > 2 || difficulty1 < 0)
+		{
+			std::cout << "Difficulty must and integer of value 0, 1, or 2!";
+			std::exit(-1);
+		}
+
+		if (difficulty2 > 2 || difficulty2 < 0)
+		{
+			std::cout << "Difficulty must and integer of value 0, 1, or 2!";
+			std::exit(-1);
+		}
+		m_Player1 = new player::Player{ this, playerType1, isBot1, difficulty1 };
+		m_Player2 = new player::Player{ this, playerType2, isBot2, difficulty2 };
 
 		const char* playerOrBot1{ m_Player1->isBot() ? "bot" : "human" };
 		const char* type1{ m_Player1->getPlayerType() == player::PlayerType::x ? "x's\n" : "o's\n" };
@@ -431,11 +447,6 @@ namespace tictactoe
 			}
 		}
 		delete[] diagonal;
-	}
-
-	int TicTacToe::getDifficulty()
-	{
-		return m_Difficulty;
 	}
 
 	int TicTacToe::getSize()

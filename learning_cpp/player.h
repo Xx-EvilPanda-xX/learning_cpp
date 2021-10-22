@@ -25,14 +25,20 @@ namespace player
 		tictactoe::SlotState slot{};
 	};
 
+	struct BotOffence
+	{
+		int currentOffenceIndex;
+		int currentOffenceType;
+	};
+
 	class Player
 	{
 	private:
 		tictactoe::TicTacToe* m_Instance;
 		PlayerType m_PlayerType;
+		BotOffence* botOffence;
 		bool m_IsBot;
-		//int currentOffenceIndex;
-		//int currentOffenceType;
+		const int m_Difficulty;
 		std::mt19937 rand;
 		std::uniform_int_distribution<> die;
 		std::uniform_int_distribution<> dieOther;
@@ -44,7 +50,7 @@ namespace player
 		bool isFullDiagonal(int index);
 
 	public:
-		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot);
+		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot, const int difficulty);
 
 		PlayerInput getPlayerInput(const char* message);
 

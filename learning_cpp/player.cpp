@@ -8,11 +8,13 @@
 
 namespace player
 {
-	Player::Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot) : m_Instance{ instance }, m_PlayerType{ playerType }, m_IsBot{ isBot }
+	Player::Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot, const int difficulty) : m_Instance{ instance }, m_PlayerType{ playerType }, m_IsBot{ isBot }, m_Difficulty{ difficulty }
 	{
 		rand = std::mt19937{ static_cast<std::mt19937::result_type>(std::time(nullptr)) };
 		die = std::uniform_int_distribution<>{ 0, m_Instance->getSize() - 1 };
 		dieOther = std::uniform_int_distribution<>{ 0, m_Instance->getSize() * m_Instance->getSize() };
+
+		botOffence = nullptr;
 	}
 
 	PlayerInput Player::getPlayerInput(const char* message)
@@ -100,7 +102,13 @@ namespace player
 			if (i < 2)
 			{
 				m_Instance->getDiagonalSlotCounts(i, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
-			}							
+			}
+			else
+			{
+				xDiagonalCount = -1;
+				oDiagonalCount = -1;
+				noneDiagonalCount = -1;
+			}
 
 			int opponentRowSlots{ m_PlayerType == PlayerType::x ? oRowCount : xRowCount };
 			int opponentColumnSlots{ m_PlayerType == PlayerType::x ? oColumnCount : xColumnCount };
@@ -109,6 +117,22 @@ namespace player
 			int ownRowSlots{ m_PlayerType == PlayerType::x ? xRowCount : oRowCount };
 			int ownColumnSlots{ m_PlayerType == PlayerType::x ? xColumnCount : oColumnCount };
 			int ownDiagonalSlots{ m_PlayerType == PlayerType::x ? xDiagonalCount : oDiagonalCount };
+
+			if (botOffence == nullptr)
+			{
+				if (opponentRowSlots == 0)
+				{
+					botOffence = new BotOffence{ i, 0 };
+				}
+				else if (opponentColumnSlots == 0)
+				{
+					botOffence = new BotOffence{ i, 1 };
+				}
+				else if (opponentDiagonalSlots == 0)
+				{
+					botOffence = new BotOffence{ i, 2 };
+				}
+			}
 			
 			if (ownRowSlots == 0 && opponentRowSlots >= m_Instance->getSize() - (m_Instance->getSize() / 2) && (opponentRowSlots >= opponentColumnSlots && opponentRowSlots >= opponentDiagonalSlots))
 			{
@@ -117,7 +141,16 @@ namespace player
 					if (isFullRow(i)) 
 						break;
 
-					PlayerInput input{ (i * m_Instance->getSize()) + die(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					PlayerInput input;
+					if (m_Difficulty < 1)
+					{
+						input = PlayerInput{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					}
+					else
+					{
+						input = PlayerInput{ (i * m_Instance->getSize()) + die(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					}
+					
 
 					if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
 					{
@@ -135,7 +168,15 @@ namespace player
 					if (isFullColumn(i))
 						break;
 
-					PlayerInput input{ i + (m_Instance->getSize() * die(rand)), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					PlayerInput input;
+					if (m_Difficulty < 1)
+					{
+						input = PlayerInput{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					}
+					else
+					{
+						input = PlayerInput{ i + (m_Instance->getSize() * die(rand)), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+					}
 
 					if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
 					{
@@ -158,13 +199,27 @@ namespace player
 						PlayerInput input;
 						if (i == 0)
 						{
-							int random{ die(rand) };
-							input = PlayerInput{ (m_Instance->getSize() * random) + random, m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							if (m_Difficulty < 1)
+							{
+								input = PlayerInput{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							}
+							else
+							{
+								int random{ die(rand) };
+								input = PlayerInput{ (m_Instance->getSize() * random) + random, m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							}
 						}
 						else if (i == 1)
 						{
-							int random{ die(rand) };
-							input = PlayerInput{ (m_Instance->getSize() * (random + 1)) - (random + 1), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							if (m_Difficulty < 1)
+							{
+								input = PlayerInput{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							}
+							else
+							{
+								int random{ die(rand) };
+								input = PlayerInput{ (m_Instance->getSize() * (random + 1)) - (random + 1), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+							}
 						}
 
 						if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
@@ -180,8 +235,61 @@ namespace player
 
 		while (true)
 		{
+			PlayerInput input;
+			if (botOffence == nullptr || m_Difficulty < 2)
+			{
+				input = PlayerInput{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+			}
+			else
+			{
+				int xCount{}, oCount{}, noneCount{};
+				switch (botOffence->currentOffenceType)
+				{
+				case 0:
+					m_Instance->getRowSlotCounts(botOffence->currentOffenceIndex, xCount, oCount, noneCount);
+					break;
+				case 1:
+					m_Instance->getColumnSlotCounts(botOffence->currentOffenceIndex, xCount, oCount, noneCount);
+					break;
+				case 2:
+					m_Instance->getDiagonalSlotCounts(botOffence->currentOffenceIndex, xCount, oCount, noneCount);
+					break;
+				}
 
-			PlayerInput input{ dieOther(rand), m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+				if ((xCount > 0 && oCount > 0) || noneCount == 0)
+				{
+					delete botOffence;
+					botOffence = nullptr;
+					continue;
+				}
+
+				int index{};
+				tictactoe::SlotState slot{ m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
+
+				switch (botOffence->currentOffenceType)
+				{
+				case 0:
+					index = (m_Instance->getSize() * botOffence->currentOffenceIndex) + die(rand);
+					break;
+				case 1:
+					index = (m_Instance->getSize() * die(rand)) + botOffence->currentOffenceIndex;
+					break;
+				case 2:
+					if (botOffence->currentOffenceIndex == 0)
+					{
+						int random{ die(rand) };
+						index = (m_Instance->getSize() * random) + random;
+					}
+					else if (botOffence->currentOffenceIndex == 1)
+					{
+						int random{ die(rand) };
+						index = (m_Instance->getSize() * (random + 1)) - (random + 1);
+					}
+					break;
+				}
+
+				input = PlayerInput{ index, slot };
+			}
 
 			if (m_Instance->getGrid()[input.index] != tictactoe::SlotState::none)
 			{

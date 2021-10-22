@@ -31,7 +31,6 @@ namespace tictactoe
 	private:
 		player::Player* m_Player1;
 		player::Player* m_Player2;
-		const int m_Difficulty;
 		const int m_Size;
 		SlotState* m_Grid;
 		GameState m_State;
@@ -45,7 +44,7 @@ namespace tictactoe
 		void catAndDelete(char*& string, const char* cat[], int numStrings);
 
 	public:
-		TicTacToe(int difficulty = 1, int size = 3);
+		TicTacToe(int size = 3);
 
 		void start();
 
