@@ -54,6 +54,8 @@ namespace player
 	public:
 		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot, const int difficulty);
 
+		~Player();
+
 		PlayerInput getPlayerInput(const char* message);
 
 		PlayerInput getBotInput(const char* message);

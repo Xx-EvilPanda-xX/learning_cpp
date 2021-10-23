@@ -17,6 +17,15 @@ namespace player
 		botOffence = nullptr;
 	}
 
+	Player::~Player()
+	{
+		if (botOffence != nullptr)
+		{
+			delete botOffence;
+			botOffence = nullptr;
+		}
+	}
+
 	PlayerInput Player::getPlayerInput(const char* message)
 	{
 		while (true)
