@@ -81,8 +81,8 @@ namespace player
 
 			int index{};
 
-			index += (m_Instance->getSize() * numVal) - 1;
-			index += ((charVal - asciia) + 1);
+			index += m_Instance->getSize() * numVal;
+			index += charVal - asciia;
 
 			PlayerInput finalInput{ index, m_PlayerType == PlayerType::x ? tictactoe::SlotState::x : tictactoe::SlotState::o };
 			if (m_Instance->getGrid()[finalInput.index] != tictactoe::SlotState::none)
