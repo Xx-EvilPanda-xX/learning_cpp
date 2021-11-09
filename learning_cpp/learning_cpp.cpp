@@ -6,22 +6,29 @@
 #include "tictactoe.h"
 
 void test();
+void operations();
 
 int main()
 {
-    //int val{ 22 };
-    //int* ptr{ &val };
-    //std::cout << ptr << "\n";
-
     int size{ input::getIntInput("Enter a width/height for the tictactoe grid (int): ") };
     tictactoe::TicTacToe tictactoe{ size };
     tictactoe.start();
 
-    //std::cout << *ptr << "\n";
-
     test();
     arrays::arrayCalculation();
+    
+    operations();
+}
 
+void test()
+{
+    std::cout << "constants::pi = " << constants::pi << "\n";
+    std::cout << "constants::e = " << constants::e << "\n";
+    std::cout << "constants::gravity = " << constants::gravity << "\n\n";
+}
+
+void operations()
+{
     int intInput_a{ input::getIntInput("Please enter an integer value for operand 1: ") };
     int intInput_b{ input::getIntInput("Please enter an integer value for operand 2: ") };
 
@@ -89,31 +96,4 @@ int main()
     logger::printResults(boolResult);
     delete boolResult;
     boolResult = nullptr;
-}
-
-void test()
-{
-    std::cout << "constants::pi = " << constants::pi << "\n";
-    std::cout << "constants::e = " << constants::e << "\n";
-    std::cout << "constants::gravity = " << constants::gravity << "\n\n";
-
-#if 0
-    int allocated{};
-    for (int i{ 0 }; i < 100000; ++i)
-    {
-        new logger::FloatResult;
-        allocated += sizeof(logger::FloatResult);
-    }
-
-    std::cout << "memory leak of " << allocated << " bytes\n";
-
-    int len{ 15 };
-    int* array{ new int[len]{3453453, 2, 234, 8564, 453, 2453, 3, 12312, 43, 5682, 56734, 2457, 23457} };
-
-    std::cout << *(array + 7) << "\n";
-
-    delete[] array;
-
-    std::cout << "\n\n";
-#endif
 }
