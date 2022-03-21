@@ -300,14 +300,17 @@ namespace player
 		int xRowCount{}, oRowCount{}, noneRowCount{};
 		int xColumnCount{}, oColumnCount{}, noneColumnCount{};
 		int xDiagonalCount{}, oDiagonalCount{}, noneDiagonalCount{};
-
+		
+		int index{ die(rand) };
 		for (int i{}; i < m_Instance->getSize(); ++i)
 		{
-			m_Instance->getRowSlotCounts(i, xRowCount, oRowCount, noneRowCount);
-			m_Instance->getColumnSlotCounts(i, xColumnCount, oColumnCount, noneColumnCount);
-			if (i < 2)
+			if (index == m_Instance->getSize()) index = 0;
+
+			m_Instance->getRowSlotCounts(index, xRowCount, oRowCount, noneRowCount);
+			m_Instance->getColumnSlotCounts(index, xColumnCount, oColumnCount, noneColumnCount);
+			if (index < 2)
 			{
-				m_Instance->getDiagonalSlotCounts(i, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
+				m_Instance->getDiagonalSlotCounts(index, xDiagonalCount, oDiagonalCount, noneDiagonalCount);
 			}
 			else
 			{
@@ -324,17 +327,18 @@ namespace player
 			{
 				if (opponentRowSlots == 0)
 				{
-					botOffence = new BotOffence{ i, 0 };
+					botOffence = new BotOffence{ index, 0 };
 				}
 				else if (opponentColumnSlots == 0)
 				{
-					botOffence = new BotOffence{ i, 1 };
+					botOffence = new BotOffence{ index, 1 };
 				}
 				else if (opponentDiagonalSlots == 0)
 				{
-					botOffence = new BotOffence{ i, 2 };
+					botOffence = new BotOffence{ index, 2 };
 				}
 			}
+			++index;
 		}
 	}
 
