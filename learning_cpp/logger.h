@@ -22,6 +22,8 @@ namespace logger
 	struct BoolResult
 	{
 		bool boolAnd{};
+		bool boolOr{};
+		bool boolEqu{};
 	};
 
 
@@ -30,7 +32,6 @@ namespace logger
 	void printResults(FloatResult* result);
 
 	void printResults(BoolResult* result);
-
 }
 
 #endif 

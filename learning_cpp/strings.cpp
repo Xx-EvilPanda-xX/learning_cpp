@@ -1,4 +1,5 @@
 #include "strings.h"
+#include <cstddef>
 
 namespace strings
 {
@@ -15,7 +16,7 @@ namespace strings
             }
         }
 
-        char* finalStr{ new char[newLength + static_cast<size_t>(1)] };
+        char* newString{ new char[newLength + static_cast<size_t>(1)] };
         int ptr{};
 
         for (int i{}; i < numStrings; ++i)
@@ -23,14 +24,14 @@ namespace strings
             int j{};
             for (const char* str = *(strings + i); *(str + j) != '\0'; ++j)
             {
-                *(finalStr + ptr) = *(str + j);
+                *(newString + ptr) = *(str + j);
                 ++ptr;
             }
         }
 
-        *(finalStr + newLength) = '\0';
+        *(newString + newLength) = '\0';
 
-        return finalStr;
+        return newString;
     }
 
     char* toString(int val)
@@ -103,14 +104,14 @@ namespace strings
 
         if (negative)
         {
-            int tempLen{ len + 1 }; // +1 for "-" negative indicator at the front
-            char* temp{ new char[tempLen + static_cast<size_t>(1)] }; // +1 for null terminator
+            int negLen{ len + 1 }; // +1 for "-" negative indicator at the front
+            char* temp{ new char[negLen + static_cast<size_t>(1)] }; // +1 for null terminator
             temp[0] = '-';
             for (int i{}; i < len; ++i)
             {
                 *(temp + (i + static_cast<size_t>(1))) = *(string + i);
             }
-            *(temp + tempLen) = '\0';
+            *(temp + negLen) = '\0';
 
             delete[] string;
             string = temp;

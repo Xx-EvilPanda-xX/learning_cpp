@@ -1,5 +1,6 @@
 #ifndef TICTACTOE_H
 #define TICTACTOE_H
+
 namespace player
 {
 	class Player;
@@ -41,7 +42,7 @@ namespace tictactoe
 
 		void printGrid();
 
-		void catAndDelete(char*& string, const char* cat[], int numStrings);
+		void strConcat(char*& string, const char* cat[], int numStrings);
 
 	public:
 		TicTacToe(int size = 3);

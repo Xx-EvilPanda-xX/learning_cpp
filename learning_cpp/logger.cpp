@@ -23,8 +23,9 @@ namespace logger
 	void printResults(BoolResult* result)
 	{
 		std::cout << std::boolalpha;
-		std::cout << "\nBoolean AND gate: " << result->boolAnd << "\n\n";
+		std::cout << "\nBoolean AND gate: " << result->boolAnd << "\n";
+		std::cout << "Boolean OR gate: " << result->boolOr << "\n";
+		std::cout << "Boolean EQUALS gate: " << result->boolEqu << "\n\n";
 		std::cout << std::noboolalpha;
-	}
-
+}
 }

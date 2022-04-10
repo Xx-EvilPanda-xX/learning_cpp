@@ -6,7 +6,9 @@
 #include "tictactoe.h"
 
 void test();
-void operations();
+void intOperations();
+void floatOperations();
+void boolOperations();
 
 int main()
 {
@@ -16,8 +18,10 @@ int main()
 
     test();
     arrays::arrayCalculation();
-    
-    operations();
+
+    intOperations();
+    floatOperations();
+    boolOperations();
 }
 
 void test()
@@ -27,7 +31,7 @@ void test()
     std::cout << "constants::gravity = " << constants::gravity << "\n\n";
 }
 
-void operations()
+void intOperations()
 {
     int intInput_a{ input::getIntInput("Please enter an integer value for operand 1: ") };
     int intInput_b{ input::getIntInput("Please enter an integer value for operand 2: ") };
@@ -51,11 +55,10 @@ void operations()
     logger::printResults(intResult);
     delete intResult;
     intResult = nullptr;
+}
 
-
-
-
-
+void floatOperations()
+{
     float floatInput_a{ input::getFloatInput("Please enter a floating point value for operand 1: ") };
     float floatInput_b{ input::getFloatInput("Please enter a floating point value for operand 2: ") };
 
@@ -78,17 +81,18 @@ void operations()
     logger::printResults(floatResult);
     delete floatResult;
     floatResult = nullptr;
+}
 
-
-
-
-
+void boolOperations()
+{
     bool boolInput_a{ input::getBoolInput("Please enter a boolean value for operand 1: ") };
     bool boolInput_b{ input::getBoolInput("Please enter a boolean value for operand 2: ") };
 
     bool boolAnd{ boolInput_a && boolInput_b };
+    bool boolOr{ boolInput_a || boolInput_b };
+    bool boolEqu{ boolInput_a == boolInput_b };
 
-    logger::BoolResult* boolResult{ new logger::BoolResult{boolAnd} };
+    logger::BoolResult* boolResult{ new logger::BoolResult{ boolAnd, boolOr, boolEqu} };
 
     std::cout << "\nbool input 1 = " << boolInput_a << "\n";
     std::cout << "\nbool input 2 = " << boolInput_b << "\n";

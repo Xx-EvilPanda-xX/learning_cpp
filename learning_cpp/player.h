@@ -40,8 +40,8 @@ namespace player
 		bool m_IsBot;
 		const int m_Difficulty;
 		std::mt19937 rand;
-		std::uniform_int_distribution<> die;
-		std::uniform_int_distribution<> dieOther;
+		std::uniform_int_distribution<> sizeDie;
+		std::uniform_int_distribution<> areaDie;
 
 		bool isFullRow(int index);
 
@@ -50,6 +50,14 @@ namespace player
 		bool isFullDiagonal(int index);
 
 		void checkForOffenceTarget();
+
+		PlayerInput doOffence();
+
+		PlayerInput doRowDefence(int row);
+
+		PlayerInput doColumnDefence(int column);
+		
+		PlayerInput doDiagonalDefence(int diagonal);
 
 	public:
 		Player(tictactoe::TicTacToe* instance, PlayerType playerType, bool isBot, const int difficulty);

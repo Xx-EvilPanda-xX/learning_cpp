@@ -114,7 +114,7 @@ namespace tictactoe
 
 			if (!m_Player2->isBot())
 			{
-				player::PlayerInput playerInput2{ m_Player2->getPlayerInput("Player 2, enter a set coords (i.e. 'a0'): ") };
+				player::PlayerInput playerInput2{ m_Player2->getPlayerInput("Player 2, enter a set of coords (i.e. 'a0'): ") };
 				updateGrid(playerInput2);
 			}
 			else
@@ -211,13 +211,13 @@ namespace tictactoe
 
 	void TicTacToe::printGrid()
 	{
-		char* maxCoordLenStr{ strings::toString(m_Size - 1) };
+		char* maxCoordStr{ strings::toString(m_Size - 1) };
 		int maxCoordsLen{};
-		for (int i{}; maxCoordLenStr[i] != '\0'; ++i)
+		for (int i{}; maxCoordStr[i] != '\0'; ++i)
 		{
 			++maxCoordsLen;
 		}
-		delete[] maxCoordLenStr;
+		delete[] maxCoordStr;
 
 		char* string{ new char[maxCoordsLen + 1] {} };
 
@@ -231,11 +231,11 @@ namespace tictactoe
 		{
 			char letter[]{ static_cast<char>(97 + i), '\0' };
 			const char* cat1[]{ string, "   ",  letter, };
-			catAndDelete(string, cat1, 3);
+			strConcat(string, cat1, 3);
 		}
 
 		const char* cat2[]{ string, "\n\n" };
-		catAndDelete(string, cat2, 2);
+		strConcat(string, cat2, 2);
 
 		for (int i{}; i < m_Size; ++i)
 		{
@@ -254,15 +254,14 @@ namespace tictactoe
 			spaces[maxCoordsLen - coordsLen] = '\0';
 
 			const char* cat3[]{ string, spaces, itr, "   "};
-			catAndDelete(string, cat3, 4);
+			strConcat(string, cat3, 4);
 			delete[] itr;
 			delete[] spaces;
 
+			SlotState* row{ getRow(i) };
 			for (int j{}; j < m_Size; ++j)
 			{
 				char slot[2]{};
-
-				SlotState* row{ getRow(i) };
 				switch (row[j])
 				{
 				case SlotState::none:
@@ -275,31 +274,30 @@ namespace tictactoe
 					slot[0] = 'o';
 					break;
 				}
-				delete[] row;
-				
 				slot[1] = '\0';
 
 				const char* cat4[]{ string, slot, j != (m_Size - 1) ? " | " : "" };
-				catAndDelete(string, cat4, 3);
+				strConcat(string, cat4, 3);
 			}
+			delete[] row;
 
 			const int dashesSize{ m_Size * 4 };
+			char* dashSpaces{ new char[maxCoordsLen]{} };
 			char* dashes{ new char[dashesSize]{} };
-			char* dashSpaces{ new char[maxCoordsLen + 1]{} };
-			for (int i{}; i < dashesSize - 1; ++i)
-			{
-				dashes[i] = '-';
-			}
 			for (int i{}; i < maxCoordsLen - 1; ++i)
 			{
 				dashSpaces[i] = ' ';
 			}
+			for (int i{}; i < dashesSize - 1; ++i)
+			{
+				dashes[i] = '-';
+			}
 			
 			dashes[dashesSize - 1] = '\0';
-			dashSpaces[maxCoordsLen] = '\0';
+			dashSpaces[maxCoordsLen - 1] = '\0';
 
 			const char* cat5[]{ string, "\n   ", dashSpaces, i != m_Size - 1 ? dashes : "", "\n" };
-			catAndDelete(string, cat5, 5);
+			strConcat(string, cat5, 5);
 			delete[] dashes;
 			delete[] dashSpaces;
 		}
@@ -308,7 +306,7 @@ namespace tictactoe
 		delete[] string;
 	}
 
-	void TicTacToe::catAndDelete(char*& string, const char* cat[], int numStrings)
+	void TicTacToe::strConcat(char*& string, const char* cat[], int numStrings)
 	{
 		char* temp = strings::strCat(cat, numStrings);
 		delete[] string;

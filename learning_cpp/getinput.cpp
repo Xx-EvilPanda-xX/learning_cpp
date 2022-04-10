@@ -9,16 +9,13 @@ namespace input
 
     int getIntInput(const char* message)
     {
-        int* val{};
+        int input{};
         bool failed{ false };
 
         do
         {
             std::cout << message;
-
-            int input{};
             std::cin >> input;
-            val = &input;
            
             if (std::cin.fail())
             {
@@ -27,28 +24,23 @@ namespace input
                 failed = true;
             }
             else
-            {
                 failed = false;
-            }
 
             clearInputBuffer();
         } while (failed);
 
-        return *val;
+        return input;
     }
 
     float getFloatInput(const char* message)
     {
-        float* val{};
+        float input{};
         bool failed{ false };
 
         do
         {
             std::cout << message;
-
-            float input{};
             std::cin >> input;
-            val = &input;
 
             if (std::cin.fail())
             {
@@ -57,28 +49,23 @@ namespace input
                 failed = true;
             }
             else
-            {
                 failed = false;
-            }
 
             clearInputBuffer();
         } while (failed);
 
-        return *val;
+        return input;
     }
 
     bool getBoolInput(const char* message)
     {
-        bool* val{};
+        bool input{};
         bool failed{ false };
 
         do
         {
             std::cout << message;
-
-            bool input{};
             std::cin >> input;
-            val = &input;
 
             if (std::cin.fail())
             {
@@ -87,21 +74,19 @@ namespace input
                 failed = true;
             }
             else
-            {
                 failed = false;
-            }
 
             clearInputBuffer();
         } while (failed);
 
-        return *val;
+        return input;
     }
 
     char* getStringInput(const char* message)
     {
-        std::cout << message;
-
         char input[maxStingInput]{};
+
+        std::cout << message;
         std::cin >> input;
         clearInputBuffer();
 
@@ -111,15 +96,15 @@ namespace input
             ++strSize;
         }
 
-        char* finalString{ new char[strSize + 1] {} };
+        char* string{ new char[strSize + 1] {} };
 
         for (int i{}; input[i] != '\0'; ++i)
         {
-            finalString[i] = input[i];
+            string[i] = input[i];
         }
 
-        finalString[strSize] = '\0';
-        return finalString;
+        string[strSize] = '\0';
+        return string;
     }
 
     static void clearInputBuffer()
